@@ -22,3 +22,10 @@ When you load a CSV into a database or a typed dataframe, you need to know colum
 - **Dates** must be ISO 8601 (`YYYY-MM-DD` or `YYYY-MM-DDTHH:MM:SS`). Invalid calendar dates like `2024-13-01` are classified as `string`, not `date`.
 - **Empty values** (empty string or whitespace-only) are treated as nulls and do not influence the inferred type. A column of entirely empty values defaults to `string`.
 - **`nan`, `inf`, `-inf`** are classified as `float`, matching Python's `float()` constructor.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
